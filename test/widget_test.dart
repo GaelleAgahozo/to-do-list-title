@@ -76,7 +76,7 @@ void main() {
     await tester.pump();
     expect(find.text("hi"), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key("OKButton")));
+    await tester.tap(find.byKey(const Key("OkButton")));
     await tester.pump();
     expect(find.text("hi"), findsOneWidget);
 
@@ -84,6 +84,4 @@ void main() {
 
     expect(listItemFinder, findsNWidgets(2));
   });
-
-  // One to test the tap and press actions on the items?
 }
