@@ -1,22 +1,18 @@
-# To Don't List
+# To-do-list-title
 
-A Flutter Demo project.
+## A Flutter Demo project.
 
-## Edit Me
+* This app is created for people who want to easily remember their tasks. It has features that allow a user to add a list of their tasks and cross them out once they finish doing their tasks. 
 
-This is the file you should edit to describe your modified app.
+* This app also has an additional feature that allows the user to add a title of their to-do-list app.  Let's say that a user has a number of things to do in a day and they are in different categories. First, they want to preprare a meal. Then, go to work. last, hangout with their friends. 
+This app allows that user to create the title that says prepare meals and then add what they want to do. For instance, grocery shopping and cooking. Then, work: coding, visiting office hours. Lastly, hangout with friends: go to a restaurant.
 
-A README.md is written using [Markdown](https://www.markdownguide.org/), a simple language for formatting text that can be rendered as a web page. This README.md information will be displayed on the GitHub main page for your repository. Here is a resource specifically for Markdown syntax and GitHub.
+* The project was created by Gaëlle Agahozo and it was forked from Dr. Mark Goadrich. 
 
-* <https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax>
+Below are the screenshots of the  
+<img width="1437" alt="image" src="https://user-images.githubusercontent.com/72021075/189545468-74caadea-a01b-4028-8a5a-2ab3bc04c56d.png">
+<img width="1437" alt="image" src="https://user-images.githubusercontent.com/72021075/189545475-604ce0af-0b86-4d19-ba11-ccef13ff5661.png">
+<img width="1437" alt="image" src="https://user-images.githubusercontent.com/72021075/189545491-b1c2ced9-2452-44c9-b039-0b42d96c1068.png">
 
-Now, with a text editor on your cloned repository, or by clicking on the edit icon ✏️ on the main github.com page for your forked repository, edit the README.md file in the root directory to provide details about your app’s functionality. Be sure to follow the guidelines of the GitHub documentation on what to include in your README.md file.
 
-* <https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes>
-
-The most important pieces to include right now are
-
-* Who is the audience for this app
-* What the app does
-* Why the app is useful
-* Multiple Screenshots of your app
+* This project will continue to be updated, for there is some features that are not working at the moment. 
