@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:to_dont_list/main.dart';
 import 'package:to_dont_list/to_do_items.dart';
+import 'package:to_dont_list/AppBar.dart';
 
 void main() {
   test('Item abbreviation should be first letter', () {

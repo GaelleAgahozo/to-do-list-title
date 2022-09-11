@@ -1,6 +1,8 @@
 // Started with https://docs.flutter.dev/development/ui/widgets-intro
 import 'package:flutter/material.dart';
+import 'package:to_dont_list/AppBar.dart';
 import 'package:to_dont_list/to_do_items.dart';
+import 'package:to_dont_list/AppBar.dart';
 
 class ToDoList extends StatefulWidget {
   const ToDoList({super.key});
@@ -116,27 +118,80 @@ class _ToDoListState extends State<ToDoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('To Do List'),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: items.map((item) {
-            return ToDoListItem(
-              item: item,
-              completed: _itemSet.contains(item),
-              onListChanged: _handleListChanged,
-              onDeleteItem: _handleDeleteItem,
-            );
-          }).toList(),
-        ),
-        floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              _displayTextInputDialog(context);
-            }));
+      appBar: AppBar(
+        title: const Text('To Do List'),
+      ),
+      body: ListView(children: [
+        Row(
+          children: const [
+            Expanded(
+                child: TextField(
+              decoration:
+                  InputDecoration(hintText: " enter a title of your to-do-app"),
+            ))
+          ],
+        )
+      ]
+
+          // padding: const EdgeInsets.symmetric(vertical: 8.0),
+          // children: items.map((item) {
+          //   return ToDoListItem(
+          //     item: item,
+          //     completed: _itemSet.contains(item),
+          //     onListChanged: _handleListChanged,
+          //     onDeleteItem: _handleDeleteItem,
+          //   );
+          // }).toList(),
+          ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            _displayTextInputDialog(context);
+          }),
+    );
   }
+//   class MyTitle extends StatefulWidget {
+//   const MyTitle({super.key});
+
+//   @override
+//   State<MyTitle> createState() => _TitleState();
+// }
+
+// class _TitleState extends State<MyTitle> {
+//   get items => null;
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text('To Do List'),
+  //       ),
+  //       body:
+  //           // Column(
+  //           //   children: <Widget>[
+  //           SafeArea(
+  //         child: Container(
+  //           child: Column(children: [
+  //             Row(
+  //               children: const [
+  //                 Expanded(
+  //                     child: TextField(
+  //                   decoration: InputDecoration(
+  //                       hintText: " enter a title of your to-do-app"),
+  //                 ))
+  //               ],
+  //             )
+  //           ]),
+  //         ),
+  //       ));
+  // }
 }
+
+// @override
+// Widget build(BuildContext context) {
+//   return MyTitle();
+// }
+// }
 
 void main() {
   runApp(const MaterialApp(
