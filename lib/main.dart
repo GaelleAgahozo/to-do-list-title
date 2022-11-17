@@ -1,14 +1,6 @@
 // Started with https://docs.flutter.dev/development/ui/widgets-intro
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:to_dont_list/to_do_items.dart';
-
-List<String> nametodo = [];
-final _itemSet = <Item>{};
-final List<Item> items = [const Item(name: "add more todos")];
-int counter = 0;
-bool good = true;
 
 class ToDoList extends StatefulWidget {
   const ToDoList({super.key});
@@ -17,17 +9,16 @@ class ToDoList extends StatefulWidget {
   State createState() => _ToDoListState();
 }
 
-// this is my changes
 class _ToDoListState extends State<ToDoList> {
   // Dialog with text from https://www.appsdeveloperblog.com/alert-dialog-with-a-text-field-in-flutter/
   final TextEditingController _inputController = TextEditingController();
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), primary: Colors.red);
-  final ButtonStyle noStyle = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 20), primary: Colors.green);
+  final ButtonStyle noStyle = ElevatedButton.styleFrom(
+      textStyle: const TextStyle(fontSize: 20), primary: Colors.red);
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
-    //print("Loading Dialog");
+    print("Loading Dialog");
     return showDialog(
         context: context,
         builder: (context) {
@@ -45,11 +36,12 @@ class _ToDoListState extends State<ToDoList> {
             ),
             actions: <Widget>[
               ElevatedButton(
-                key: const Key("CancelButton"),
+                key: const Key("OkButton"),
                 style: yesStyle,
-                child: const Text('Cancel'),
+                child: const Text('OK'),
                 onPressed: () {
                   setState(() {
+                    _handleNewItem(valueText);
                     Navigator.pop(context);
                   });
                 },
@@ -60,19 +52,16 @@ class _ToDoListState extends State<ToDoList> {
                 valueListenable: _inputController,
                 builder: (context, value, child) {
                   return ElevatedButton(
-                    key: const Key("OKButton"),
+                    key: const Key("CancelButton"),
                     style: noStyle,
                     onPressed: value.text.isNotEmpty
                         ? () {
                             setState(() {
-                              _handleNewItem(valueText);
-                              counter += 1;
                               Navigator.pop(context);
-                              //if (counter >= 5) {}
                             });
                           }
                         : null,
-                    child: const Text('OK'),
+                    child: const Text('Cancel'),
                   );
                 },
               ),
@@ -82,6 +71,10 @@ class _ToDoListState extends State<ToDoList> {
   }
 
   String valueText = "";
+
+  final List<Item> items = [const Item(name: "add more todos")];
+
+  final _itemSet = <Item>{};
 
   void _handleListChanged(Item item, bool completed) {
     setState(() {
@@ -96,16 +89,10 @@ class _ToDoListState extends State<ToDoList> {
         print("Completing");
         _itemSet.add(item);
         items.add(item);
-        if (counter == 0) {
-          counter = 0;
-        } else {
-          counter -= 1;
-        }
       } else {
         print("Making Undone");
         _itemSet.remove(item);
         items.insert(0, item);
-        counter += 1;
       }
     });
   }
@@ -120,9 +107,8 @@ class _ToDoListState extends State<ToDoList> {
   void _handleNewItem(String itemText) {
     setState(() {
       print("Adding new item");
-      Item item = Item(name: itemText);
+      Item item = Item(name: valueText);
       items.insert(0, item);
-      nametodo.add(item.name);
       _inputController.clear();
     });
   }
@@ -130,127 +116,30 @@ class _ToDoListState extends State<ToDoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('To Do List'),
-          actions: [
-            PrToDo(counter: counter),
-            IconButton(
-              key: const Key('addButton'),
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                print("loading search screen");
-                showSearch(
-                  context: context,
-                  delegate: MySearchDelegate(),
-                  useRootNavigator: true,
-                );
-              },
-            ),
-          ],
-        ),
-        body: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: items.map((item) {
-            return ToDoListItem(
-              item: item,
-              completed: _itemSet.contains(item),
-              onListChanged: _handleListChanged,
-              onDeleteItem: _handleDeleteItem,
-            );
-          }).toList(),
-        ),
-        floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              _displayTextInputDialog(context);
-            }));
-  }
-}
-
-class MySearchDelegate extends SearchDelegate {
-  List<String> searchResults = nametodo;
-
-  @override
-  Widget? buildLeading(BuildContext context) => IconButton(
-        key: const Key('addButton3'),
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => close(context, null),
-      );
-  @override
-  List<Widget>? buildActions(BuildContext context) => [
-        IconButton(
-          key: const Key('addButton2'),
-          icon: const Icon(Icons.clear),
+      backgroundColor: Color.fromARGB(255, 207, 206, 224),
+      appBar: AppBar(
+        title: const Text('To Do List'),
+        backgroundColor: Color.fromARGB(255, 238, 82, 168),
+      ),
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        children: items.map((item) {
+          return ToDoListItem(
+            item: item,
+            completed: _itemSet.contains(item),
+            onListChanged: _handleListChanged,
+            onDeleteItem: _handleDeleteItem,
+          );
+        }).toList(),
+      ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          backgroundColor: Color.fromARGB(255, 238, 82, 168),
           onPressed: () {
-            if (query.isEmpty) {
-              close(context, null);
-            } else {
-              query = '';
-            }
-          },
-        ),
-      ];
-  @override
-  Widget buildResults(BuildContext context) => Center(
-      child: Text(
-          key: Key('addText1'),
-          query,
-          style: const TextStyle(fontSize: 70, fontWeight: FontWeight.w700)));
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = searchResults.where((searchResult) {
-      final result = searchResult.toLowerCase();
-      final input = query.toLowerCase();
-      return result.contains(input);
-    }).toList();
-
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
-
-        return ListTile(
-          title: Text(suggestion),
-          onTap: () {
-            query = suggestion;
-
-            showResults(context);
-          },
-        );
-      },
+            _displayTextInputDialog(context);
+          }),
     );
-  }
-}
-
-class PrToDo extends StatelessWidget {
-  const PrToDo({super.key, required this.counter});
-
-  final int counter;
-
-  Color colorChoise() {
-    //setState(() {});
-    if (counter > 4) {
-      return Colors.red;
-    } else {
-      return Colors.green;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-        key: const Key('toolTip1'),
-        message: 'Red: Too much uncompleted tasks, Green: Good',
-        child: TextButton(
-          key: const Key('TextButton1'),
-          style: TextButton.styleFrom(
-            backgroundColor: colorChoise(),
-            padding: const EdgeInsets.all(16.0),
-            textStyle: const TextStyle(fontSize: 20),
-          ),
-          child: const Text('Status'),
-          onPressed: () {},
-        ));
   }
 }
 
