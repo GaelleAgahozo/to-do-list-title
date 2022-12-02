@@ -18,7 +18,8 @@ class ToDoListItem extends StatelessWidget {
       {required this.item,
       required this.completed,
       required this.onListChanged,
-      required this.onDeleteItem})
+      required this.onDeleteItem,
+      required void onhandleTasks})
       : super(key: ObjectKey(item));
 
   final Item item;

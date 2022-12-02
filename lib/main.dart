@@ -1,12 +1,20 @@
 // Started with https://docs.flutter.dev/development/ui/widgets-intro
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:to_dont_list/AppBar.dart';
+import 'package:to_dont_list/completed.dart';
+import 'package:to_dont_list/services/app_router.dart';
 import 'package:to_dont_list/to_do_items.dart';
-import 'package:to_dont_list/AppBar.dart';
+import 'package:to_dont_list/todo_desc.dart';
+import 'package:to_dont_list/completed.dart';
+import 'package:to_dont_list/drawer.dart';
+
+int count = 0;
 
 class ToDoList extends StatefulWidget {
   const ToDoList({super.key});
-
+  static const id = " tasks_screen";
+  // final AppRouter appRouter;
   @override
   State createState() => _ToDoListState();
 }
@@ -18,6 +26,7 @@ class _ToDoListState extends State<ToDoList> {
       textStyle: const TextStyle(fontSize: 20), primary: Colors.green);
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 20), primary: Colors.red);
+  // double count = 0;
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
     print("Loading Dialog");
@@ -30,6 +39,7 @@ class _ToDoListState extends State<ToDoList> {
               onChanged: (value) {
                 setState(() {
                   valueText = value;
+                  // count++;
                 });
               },
               controller: _inputController,
@@ -44,6 +54,8 @@ class _ToDoListState extends State<ToDoList> {
                 onPressed: () {
                   setState(() {
                     _handleNewItem(valueText);
+                    count++;
+
                     Navigator.pop(context);
                   });
                 },
@@ -91,10 +103,12 @@ class _ToDoListState extends State<ToDoList> {
         print("Completing");
         _itemSet.add(item);
         items.add(item);
+        count -= 1;
       } else {
         print("Making Undone");
         _itemSet.remove(item);
         items.insert(0, item);
+        count += 1;
       }
     });
   }
@@ -103,6 +117,7 @@ class _ToDoListState extends State<ToDoList> {
     setState(() {
       print("Deleting item");
       items.remove(item);
+      // count -= 1;
     });
   }
 
@@ -115,87 +130,84 @@ class _ToDoListState extends State<ToDoList> {
     });
   }
 
+  Future<void> _handleTasks() async {
+    // padding:
+    // const EdgeInsets.only(bottom: 50, left: 250);
+    // child:
+    ElevatedButton(
+        key: const Key("SwitchKey"),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TodoDesc()),
+          );
+        },
+        child: const Text("Next Screen"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 207, 206, 224),
       appBar: AppBar(
         title: const Text('To Do List'),
-      ),
-      body: ListView(children: [
-        Row(
-          children: const [
-            Expanded(
-                child: TextField(
-              decoration:
-                  InputDecoration(hintText: " enter a title of your to-do-app"),
-            ))
-          ],
-        )
-      ]
+        backgroundColor: Color.fromARGB(255, 200, 114, 9),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => TodoDesc()));
 
-          // padding: const EdgeInsets.symmetric(vertical: 8.0),
-          // children: items.map((item) {
-          //   return ToDoListItem(
-          //     item: item,
-          //     completed: _itemSet.contains(item),
-          //     onListChanged: _handleListChanged,
-          //     onDeleteItem: _handleDeleteItem,
-          //   );
-          // }).toList(),
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: ((context) => TodoDesc( ))));
+            },
+            child: Text('Items added $count'),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Completed()));
+            },
+            child: const Text('Completed Tasks'),
+          ),
+        ],
+      ),
+      drawer: MyDrawer(),
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        // prototypeItem: const FirstRoute(),
+        children: items.map((item) {
+          return ToDoListItem(
+            item: item,
+            completed: _itemSet.contains(item),
+            onListChanged: _handleListChanged,
+            onDeleteItem: _handleDeleteItem,
+            onhandleTasks: _handleTasks(),
+            // onhandleTasks: _handleTasks(),
+          );
+        }).toList(),
+      ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
+          backgroundColor: Color.fromARGB(255, 200, 114, 9),
           onPressed: () {
             _displayTextInputDialog(context);
           }),
     );
   }
-//   class MyTitle extends StatefulWidget {
-//   const MyTitle({super.key});
-
-//   @override
-//   State<MyTitle> createState() => _TitleState();
-// }
-
-// class _TitleState extends State<MyTitle> {
-//   get items => null;
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('To Do List'),
-  //       ),
-  //       body:
-  //           // Column(
-  //           //   children: <Widget>[
-  //           SafeArea(
-  //         child: Container(
-  //           child: Column(children: [
-  //             Row(
-  //               children: const [
-  //                 Expanded(
-  //                     child: TextField(
-  //                   decoration: InputDecoration(
-  //                       hintText: " enter a title of your to-do-app"),
-  //                 ))
-  //               ],
-  //             )
-  //           ]),
-  //         ),
-  //       ));
-  // }
 }
 
-// @override
-// Widget build(BuildContext context) {
-//   return MyTitle();
-// }
-// }
-
 void main() {
-  runApp(const MaterialApp(
+  // var appRouter;
+  runApp(MaterialApp(
+    theme: ThemeData(
+      primaryColor: Color.fromARGB(255, 200, 114, 9),
+      fontFamily: 'RaleWay',
+      brightness: Brightness.light,
+    ),
     title: 'To Do List',
     home: ToDoList(),
+    // onGenerateRoute: appRouter.onGenerateRoute,
   ));
 }

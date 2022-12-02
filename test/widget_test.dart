@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:to_dont_list/main.dart';
+import 'package:to_dont_list/services/app_router.dart';
 import 'package:to_dont_list/to_do_items.dart';
-import 'package:to_dont_list/AppBar.dart';
 
 void main() {
   test('Item abbreviation should be first letter', () {
@@ -23,10 +23,12 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ToDoListItem(
-                item: const Item(name: "test"),
-                completed: true,
-                onListChanged: (Item item, bool completed) {},
-                onDeleteItem: (Item item) {}))));
+      item: const Item(name: "test"),
+      completed: true,
+      onListChanged: (Item item, bool completed) {},
+      onDeleteItem: (Item item) {},
+      onhandleTasks: null,
+    ))));
     final textFinder = find.text('test');
 
     // Use the `findsOneWidget` matcher provided by flutter_test to verify
@@ -39,10 +41,12 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ToDoListItem(
-                item: const Item(name: "test"),
-                completed: true,
-                onListChanged: (Item item, bool completed) {},
-                onDeleteItem: (Item item) {}))));
+      item: const Item(name: "test"),
+      completed: true,
+      onListChanged: (Item item, bool completed) {},
+      onDeleteItem: (Item item) {},
+      onhandleTasks: null,
+    ))));
     final abbvFinder = find.text('t');
     final avatarFinder = find.byType(CircleAvatar);
 
@@ -55,9 +59,11 @@ void main() {
     expect(circ.backgroundColor, Colors.black54);
     expect(ctext.data, "t");
   });
-
+  // var toDoList;
   testWidgets('Default ToDoList has one item', (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: ToDoList()));
+    const toDoList = ToDoList();
+
+    await tester.pumpWidget(MaterialApp(home: toDoList));
 
     final listItemFinder = find.byType(ToDoListItem);
 
